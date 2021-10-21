@@ -18,7 +18,7 @@ const getStudents = async (req, res) => {
       const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM student`);
       const results = { 'results': (result) ? result.rows : null };
       res.json(results);
-      client.release();
+      // client.release();
     } catch (err) {
       console.error(err);
       res.send("Error " + err);

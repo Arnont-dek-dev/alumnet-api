@@ -572,6 +572,34 @@ const updateEmail = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
+// ---------------------------- Create By Section ---------------------- //
+
+const createCompany = async (req, res) => {
+  try {
+    const time = moment().locale('th').format();
+    const result = await client.query(`with company as(
+      insert
+        into
+          workplace ("name")
+        values('${req.body.name}')
+      )
+      insert
+        into
+        workplace_history ( student_id,
+        "position",
+        start_work)
+      values('${req.body.student_id}',
+      '${req.body.position}',
+      '${time}');
+       `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
   module.exports = {
     getStudents_byId,
     getdetailUniversity,
@@ -579,6 +607,8 @@ const updateEmail = async (req, res) => {
 
     updateEpigramStatus,
     updateEmail,
+
+    createCompany,
 
       getStudents,
       createStudents,

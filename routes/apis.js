@@ -61,5 +61,5 @@ router.get('/student/profile/:id',db.getdetailprofile);
 
 //  --------------------------- Edit By Section ------------------ // 
 router.put('/student/epigram_status/:id',db.updateEpigramStatus);
-
+router.put('/student/updateemail/:id', db.updateEmail);
 module.exports = router;

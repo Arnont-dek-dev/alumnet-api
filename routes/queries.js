@@ -560,12 +560,25 @@ const getdetailprofile = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
+const updateEmail = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE public.student SET email='${req.body.email}' where student_id = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
   module.exports = {
     getStudents_byId,
     getdetailUniversity,
     getdetailprofile,
 
     updateEpigramStatus,
+    updateEmail,
 
       getStudents,
       createStudents,

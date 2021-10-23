@@ -55,6 +55,7 @@ router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 
 // -------------- get By ID ------------------ //
 router.get('/student/:id',db.getStudents_byId);
+router.get('/student/infomation/:id',db.getdetailUniversity);
 
 
 //  --------------------------- Edit By Section ------------------ // 

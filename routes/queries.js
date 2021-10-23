@@ -540,9 +540,30 @@ const getdetailUniversity = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
+const getdetailprofile = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT s.firstname, s.lastname, s.epigram, s.status, s.image_profile, m."name" as "major" ,c."name" as "campus",s.graduate_year ,w."name" as "workplace", wh.position, a.province, a.country
+    FROM student s inner join major m on s.major_id = m.major_id 
+    inner join faculty f on f.faculty_id = m.faculty_id 
+    inner join campus c on c.campus_id = f.campus_id 
+    inner join workplace_history wh on wh.student_id = s.student_id
+    inner join workplace w on w.workplace_id = wh.workplace_id
+    inner join address a on a.student_id = s.student_id
+    where wh.student_id = '${req.params.id}' and wh.finish_work is null`);
+    const results = { 'results': (result) ? result.rows : null};
+    res.json(results);
+    // const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM public.student where email = '${req.body.email}'`);
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
   module.exports = {
     getStudents_byId,
     getdetailUniversity,
+    getdetailprofile,
 
     updateEpigramStatus,
 

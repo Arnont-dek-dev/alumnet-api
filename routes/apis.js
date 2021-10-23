@@ -52,3 +52,5 @@ router.get('/workplace_history',db.getWorkplace_history);
 router.post('/workplace_history',db.createWorkplace_history);
 router.put('/workplace_history/:id',db.updateWorkplace_history);
 router.delete('/workplace_history/:id',db.deleteWorkplace_history);
+
+module.exports = router;

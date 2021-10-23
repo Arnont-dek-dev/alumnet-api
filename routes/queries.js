@@ -17,56 +17,56 @@ let client = null;
 
 // --------------- Table Student ------------------//
 const getStudents = async (req, res) => {
-    try {
-      const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM student`);
-      const results = { 'results': (result) ? result.rows : null };
-      res.json(results);
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
+  try {
+    const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM student`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
   }
+}
 
-  const createStudents = async (req, res) => {
-    try {
-      const result = await client.query(`INSERT INTO student (student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile) 
+const createStudents = async (req, res) => {
+  try {
+    const result = await client.query(`INSERT INTO student (student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile) 
       VALUES('${req.body.student_id}', '${req.body.firstname}', '${req.body.lastname}', '${req.body.dob}', '${req.body.sex}', '${req.body.email}', '${req.body.epigram}', 
       '${req.body.status}', '${req.body.education_status}', '${req.body.graduate_year}', ${req.body.major_id}, ${req.body.public_relation_id}, '${req.body.image_profile}')`);
-      const results = { 'results': (result) ? result.rows : null };
-      res.json(results);
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
   }
+}
 
-  const updateStudents = async (req, res) => {
-    try {
-      const result = await client.query(`UPDATE student SET student_id='${req.body.student_id}', firstname='${req.body.firstname}', lastname='${req.body.lastname}', 
+const updateStudents = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE student SET student_id='${req.body.student_id}', firstname='${req.body.firstname}', lastname='${req.body.lastname}', 
       dob='${req.body.dob}', sex='${req.body.sex}', email='${req.body.email}', epigram='${req.body.epigram}', status='${req.body.status}',education_status='${req.body.education_status}', 
       graduate_year='${req.body.graduate_year}', major_id=${req.body.major_id}, public_relation_id=${req.body.public_relation_id}, image_profile='${req.body.image_profile}' 
       where student_id = '${req.params.id}'`);
-      const results = { 'results': (result) ? result.rows : null };
-      res.json(results);
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
   }
+}
 
-  const deleteStudents = async (req, res) => {
-    try {
-      const result = await client.query(`DELETE FROM student WHERE  student_id='${req.params.id}'`);
-      const results = { 'results': (result) ? result.rows : null };
-      res.json(results);
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
+const deleteStudents = async (req, res) => {
+  try {
+    const result = await client.query(`DELETE FROM student WHERE  student_id='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
   }
+}
 
 
-  
+
 // --------------- Table Adddress ------------------//
 const getAddress = async (req, res) => {
   try {
@@ -533,7 +533,7 @@ const getdetailUniversity = async (req, res) => {
     inner join campus c on c.campus_id = f.campus_id 
     inner join student s on s.major_id = m.major_id 
     where s.student_id = '${req.params.id}'`);
-    const results = { 'results': (result) ? result.rows : null};
+    const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
     console.error(err);
@@ -551,7 +551,7 @@ const getdetailprofile = async (req, res) => {
     inner join workplace w on w.workplace_id = wh.workplace_id
     inner join address a on a.student_id = s.student_id
     where wh.student_id = '${req.params.id}' and wh.finish_work is null`);
-    const results = { 'results': (result) ? result.rows : null};
+    const results = { 'results': (result) ? result.rows : null };
     res.json(results);
     // const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM public.student where email = '${req.body.email}'`);
 
@@ -578,21 +578,10 @@ const updateEmail = async (req, res) => {
 const createCompany = async (req, res) => {
   try {
     const time = moment().locale('th').format();
-    const result = await client.query(`with company as(
-      insert
-        into
-          workplace ("name")
-        values('${req.body.name}')
-      )
-      insert
-        into
-        workplace_history ( student_id,
-        "position",
-        start_work)
-      values('${req.body.student_id}',
-      '${req.body.position}',
-      '${time}');
-       `);
+    const result = await client.query(`with company as(insert into workplace ("name") values('${req.body.name}') 
+    )
+      insert into workplace_history (student_id,"position",start_work)
+      values('${req.body.student_id}','${req.body.position}','${time}')`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -600,54 +589,54 @@ const createCompany = async (req, res) => {
     res.send("Error " + err);
   }
 }
-  module.exports = {
-    getStudents_byId,
-    getdetailUniversity,
-    getdetailprofile,
+module.exports = {
+  getStudents_byId,
+  getdetailUniversity,
+  getdetailprofile,
 
-    updateEpigramStatus,
-    updateEmail,
+  updateEpigramStatus,
+  updateEmail,
 
-    createCompany,
+  createCompany,
 
-      getStudents,
-      createStudents,
-      updateStudents,
-      deleteStudents,
-      getAddress,
-      createAddress,
-      updateAddress,
-      deleteAddress,
-      getAdmin,
-      createAdmin,
-      updateAdmin,
-      deleteAdmin,
-      getCampus,
-      createCampus,
-      updateCampus,
-      deleteCampus,
-      getFaculty,
-      createFaculty,
-      updateFaculty,
-      deleteFaculty,
-      getMajor,
-      createMajor,
-      updateMajor,
-      deleteMajor,
-      getPublic_relation,
-      createPublic_relation,
-      updatePublic_relation,
-      deletePublic_relation,
-      getStudent_contact,
-      createStudent_contact,
-      updateStudent_contact,
-      deleteStudent_contact,
-      getWorkplace,
-      createWorkplace,
-      updateWorkplace,
-      deleteWorkplace,
-      getWorkplace_history,
-      createWorkplace_history,
-      updateWorkplace_history,
-      deleteWorkplace_history
-  }
+  getStudents,
+  createStudents,
+  updateStudents,
+  deleteStudents,
+  getAddress,
+  createAddress,
+  updateAddress,
+  deleteAddress,
+  getAdmin,
+  createAdmin,
+  updateAdmin,
+  deleteAdmin,
+  getCampus,
+  createCampus,
+  updateCampus,
+  deleteCampus,
+  getFaculty,
+  createFaculty,
+  updateFaculty,
+  deleteFaculty,
+  getMajor,
+  createMajor,
+  updateMajor,
+  deleteMajor,
+  getPublic_relation,
+  createPublic_relation,
+  updatePublic_relation,
+  deletePublic_relation,
+  getStudent_contact,
+  createStudent_contact,
+  updateStudent_contact,
+  deleteStudent_contact,
+  getWorkplace,
+  createWorkplace,
+  updateWorkplace,
+  deleteWorkplace,
+  getWorkplace_history,
+  createWorkplace_history,
+  updateWorkplace_history,
+  deleteWorkplace_history
+}

@@ -503,7 +503,7 @@ const deleteWorkplace_history = async (req, res) => {
 
 const getStudents_byId = async (req, res) => {
   try {
-    const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM student where email = '${req.params.id}`);
+    const result = await client.query(`SELECT student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile FROM public.student where email = '${req.params.id}'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

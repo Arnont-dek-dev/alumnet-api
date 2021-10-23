@@ -53,4 +53,8 @@ router.post('/workplace_history',db.createWorkplace_history);
 router.put('/workplace_history/:id',db.updateWorkplace_history);
 router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 
+// -------------- get By ID ------------------ //
+router.get('/student/:id',db.getStudents_byId);
+
+
 module.exports = router;

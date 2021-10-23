@@ -511,8 +511,23 @@ const getStudents_byId = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
+//  --------------------------- Edit By Section ------------------ // 
+const updateEpigramStatus = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE student SET epigram='${req.body.epigram}', status='${req.body.status}' where student_id = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
   module.exports = {
     getStudents_byId,
+
+    updateEpigramStatus,
 
       getStudents,
       createStudents,

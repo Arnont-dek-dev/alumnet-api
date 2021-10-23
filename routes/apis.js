@@ -57,4 +57,7 @@ router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 router.get('/student/:id',db.getStudents_byId);
 
 
+//  --------------------------- Edit By Section ------------------ // 
+router.put('/student/epigram_status/:id',db.updateEpigramStatus);
+
 module.exports = router;

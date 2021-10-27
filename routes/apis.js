@@ -64,5 +64,5 @@ router.put('/student/epigram_status/:id',db.updateEpigramStatus);
 router.put('/student/updateemail/:id', db.updateEmail);
 
 // ------------------------------- Create By Section ------------------- //
-router.post('/student/company',db.createCompany);
+router.post('/student/workplace',db.createWork);
 module.exports = router;

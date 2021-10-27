@@ -65,4 +65,5 @@ router.put('/student/updateemail/:id', db.updateEmail);
 
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);
+
 module.exports = router;

@@ -578,11 +578,12 @@ const updateEmail = async (req, res) => {
 const createWork = async (req, res) => {
   try {
     const time = moment().locale('th').format();
+    // const start_work = to_timestamp(req.body.start_work, 'YYYY-MM-DD')
     const result = await client.query(`with company as(INSERT INTO workplace (name) VALUES('${req.body.name}')
 
     )
-    INSERT INTO workplace_history (student_id, "position", start_work, finish_work) VALUES('${req.body.student_id}', '${req.body.position}', 
-    '${req.body.start_work}', '${req.body.finish_work}')`);
+    INSERT INTO workplace_history (student_id, "position", start_work) VALUES('${req.body.student_id}', '${req.body.position}', 
+    '${req.body.start_work}')`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

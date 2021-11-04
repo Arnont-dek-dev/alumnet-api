@@ -512,6 +512,86 @@ const getStudents_byId = async (req, res) => {
   }
 }
 
+const getStudents_timeline = async (req, res) => {
+  try {
+    const result = await client.query(`select 
+    s.firstname,
+    s.lastname,
+    s.image_profile,
+    w."name" ,
+    wh."position",
+    wh.start_work 
+    from
+    student s
+  inner join major m on m.major_id = s.major_id 
+  inner join faculty f on f.faculty_id = m.faculty_id 
+  inner join campus c on c.campus_id = f.campus_id 
+  inner join public_relation pr on pr.public_relation_id = s.public_relation_id
+  inner join workplace_history wh on wh.student_id = s.student_id 
+  inner join workplace w on w.workplace_id = wh.workplace_id 
+  where s.student_id = '${req.params.student_id}' and s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const getStudents_alldetail = async (req, res) => {
+  try {
+    const result = await client.query(`select 
+    distinct ON (s.email) email,
+    s.firstname,
+    s.lastname,
+    s.image_profile,
+    s.major_id,
+    m.faculty_id,
+    f.campus_id,
+    m."name" as major,
+    f."name" as faculty,
+    c."name" as campus
+    from student s
+  inner join major m on m.major_id = s.major_id 
+  inner join faculty f on f.faculty_id = m.faculty_id 
+  inner join campus c on c.campus_id = f.campus_id 
+  where s.email = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const getStudents_alldetail = async (req, res) => {
+  try {
+    const result = await client.query(`select 
+    distinct ON (s.email) email,
+    s.firstname,
+    s.lastname,
+    s.image_profile,
+    s.major_id,
+    m.faculty_id,
+    f.campus_id,
+    s.graduate_year,
+    m."name" as major,
+    f."name" as faculty,
+    c."name" as campus
+    from student s
+  inner join major m on m.major_id = s.major_id 
+  inner join faculty f on f.faculty_id = m.faculty_id 
+  inner join campus c on c.campus_id = f.campus_id 
+  where s.email = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
 //  --------------------------- Edit By Section ------------------ // 
 const updateEpigramStatus = async (req, res) => {
   try {
@@ -519,6 +599,17 @@ const updateEpigramStatus = async (req, res) => {
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
 
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const updateImage_profile = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE student SET  image_profile='${req.body.image_profile}' where student_id='${req.params.id}';`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
   } catch (err) {
     console.error(err);
     res.send("Error " + err);
@@ -591,13 +682,17 @@ const createWork = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
 module.exports = {
   getStudents_byId,
   getdetailUniversity,
   getdetailprofile,
+  getStudents_timeline,
+  getStudents_alldetail,
 
   updateEpigramStatus,
   updateEmail,
+  updateImage_profile,
 
   createWork,
 

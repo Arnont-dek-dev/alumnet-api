@@ -57,11 +57,14 @@ router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 router.get('/student/:id',db.getStudents_byId);
 router.get('/student/infomation/:id',db.getdetailUniversity);
 router.get('/student/profile/:id',db.getdetailprofile);
+router.get('/student/timeline/:major_id/:faculty_id/:campus_id/:graduate_year',db.getStudents_timeline);
+router.get('/student/detail/:id',db.getStudents_alldetail);
 
 
 //  --------------------------- Edit By Section ------------------ // 
 router.put('/student/epigram_status/:id',db.updateEpigramStatus);
 router.put('/student/updateemail/:id', db.updateEmail);
+router.put('/student/image_profile/:id',db.updateImage_profile);
 
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);

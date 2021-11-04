@@ -564,32 +564,32 @@ const getStudents_alldetail = async (req, res) => {
   }
 }
 
-const getStudents_alldetail = async (req, res) => {
-  try {
-    const result = await client.query(`select 
-    distinct ON (s.email) email,
-    s.firstname,
-    s.lastname,
-    s.image_profile,
-    s.major_id,
-    m.faculty_id,
-    f.campus_id,
-    s.graduate_year,
-    m."name" as major,
-    f."name" as faculty,
-    c."name" as campus
-    from student s
-  inner join major m on m.major_id = s.major_id 
-  inner join faculty f on f.faculty_id = m.faculty_id 
-  inner join campus c on c.campus_id = f.campus_id 
-  where s.email = '${req.params.id}'`);
-    const results = { 'results': (result) ? result.rows : null };
-    res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.send("Error " + err);
-  }
-}
+// const getStudents_alldetail = async (req, res) => {
+//   try {
+//     const result = await client.query(`select 
+//     distinct ON (s.email) email,
+//     s.firstname,
+//     s.lastname,
+//     s.image_profile,
+//     s.major_id,
+//     m.faculty_id,
+//     f.campus_id,
+//     s.graduate_year,
+//     m."name" as major,
+//     f."name" as faculty,
+//     c."name" as campus
+//     from student s
+//   inner join major m on m.major_id = s.major_id 
+//   inner join faculty f on f.faculty_id = m.faculty_id 
+//   inner join campus c on c.campus_id = f.campus_id 
+//   where s.email = '${req.params.id}'`);
+//     const results = { 'results': (result) ? result.rows : null };
+//     res.json(results);
+//   } catch (err) {
+//     console.error(err);
+//     res.send("Error " + err);
+//   }
+// }
 
 
 //  --------------------------- Edit By Section ------------------ // 

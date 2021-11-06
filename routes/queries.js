@@ -512,7 +512,7 @@ const getStudents_byId = async (req, res) => {
   }
 }
 
-const getStudents_timeline = async (req, res) => {
+const getStudents_feed = async (req, res) => {
   try {
     const result = await client.query(`select 
     s.firstname,
@@ -564,32 +564,28 @@ const getStudents_alldetail = async (req, res) => {
   }
 }
 
-// const getStudents_alldetail = async (req, res) => {
-//   try {
-//     const result = await client.query(`select 
-//     distinct ON (s.email) email,
-//     s.firstname,
-//     s.lastname,
-//     s.image_profile,
-//     s.major_id,
-//     m.faculty_id,
-//     f.campus_id,
-//     s.graduate_year,
-//     m."name" as major,
-//     f."name" as faculty,
-//     c."name" as campus
-//     from student s
-//   inner join major m on m.major_id = s.major_id 
-//   inner join faculty f on f.faculty_id = m.faculty_id 
-//   inner join campus c on c.campus_id = f.campus_id 
-//   where s.email = '${req.params.id}'`);
-//     const results = { 'results': (result) ? result.rows : null };
-//     res.json(results);
-//   } catch (err) {
-//     console.error(err);
-//     res.send("Error " + err);
-//   }
-// }
+const getStudents_timeline = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    image_profile,
+    wh.start_work,
+    w."name",
+    wh.position
+  from
+    student s
+  inner join workplace_history wh on
+    wh.student_id = s.student_id
+  inner join workplace w on
+    w.workplace_id = wh.workplace_history_id
+  where
+    s.student_id = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -687,8 +683,9 @@ module.exports = {
   getStudents_byId,
   getdetailUniversity,
   getdetailprofile,
-  getStudents_timeline,
+  getStudents_feed,
   getStudents_alldetail,
+  getStudents_timeline,
 
   updateEpigramStatus,
   updateEmail,

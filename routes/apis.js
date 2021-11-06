@@ -57,8 +57,10 @@ router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 router.get('/student/:id',db.getStudents_byId);
 router.get('/student/infomation/:id',db.getdetailUniversity);
 router.get('/student/profile/:id',db.getdetailprofile);
-router.get('/student/timeline/:major_id/:faculty_id/:campus_id/:graduate_year',db.getStudents_timeline);
+router.get('/student/feed/:major_id/:faculty_id/:campus_id/:graduate_year',db.getStudents_feed);
 router.get('/student/detail/:id',db.getStudents_alldetail);
+router.get('/student/timeline/:id',db.getStudents_timeline);
+
 
 
 //  --------------------------- Edit By Section ------------------ // 

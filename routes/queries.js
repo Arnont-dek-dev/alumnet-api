@@ -587,6 +587,16 @@ const getStudents_timeline = async (req, res) => {
   }
 }
 
+const getAdminByemail = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT email, faculty_id, campus_id, fristname, lastname FROM public."admin" where email = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
 
 //  --------------------------- Edit By Section ------------------ // 
 const updateEpigramStatus = async (req, res) => {
@@ -686,6 +696,7 @@ module.exports = {
   getStudents_feed,
   getStudents_alldetail,
   getStudents_timeline,
+  getAdminByemail,
 
   updateEpigramStatus,
   updateEmail,

@@ -518,7 +518,7 @@ const getStudents_feed = async (req, res) => {
     s.firstname,
     s.lastname,
     s.image_profile,
-    w."name" ,
+    w."name" as workplace,
     wh."position",
     wh.start_work 
     from
@@ -529,7 +529,34 @@ const getStudents_feed = async (req, res) => {
   inner join public_relation pr on pr.public_relation_id = s.public_relation_id
   inner join workplace_history wh on wh.student_id = s.student_id 
   inner join workplace w on w.workplace_id = wh.workplace_id 
-  where s.student_id = '${req.params.student_id}' and s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
+  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const getStudents_classdirectory = async (req, res) => {
+  try {
+    const result = await client.query(`select 
+    distinct ON ( s.student_id) email,
+    s.firstname,
+    s.lastname,
+    s.image_profile,
+    w.province,
+    w.country,
+    wh."position"
+    from
+    student s
+  inner join major m on m.major_id = s.major_id 
+  inner join faculty f on f.faculty_id = m.faculty_id 
+  inner join campus c on c.campus_id = f.campus_id 
+  inner join public_relation pr on pr.public_relation_id = s.public_relation_id
+  inner join workplace_history wh on wh.student_id = s.student_id 
+  inner join workplace w on w.workplace_id = wh.workplace_id 
+  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -546,6 +573,7 @@ const getStudents_alldetail = async (req, res) => {
     s.lastname,
     s.image_profile,
     s.major_id,
+    s.graduate_year,
     m.faculty_id,
     f.campus_id,
     m."name" as major,
@@ -697,6 +725,7 @@ module.exports = {
   getStudents_alldetail,
   getStudents_timeline,
   getAdminByemail,
+  getStudents_classdirectory,
 
   updateEpigramStatus,
   updateEmail,

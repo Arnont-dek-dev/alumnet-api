@@ -606,7 +606,9 @@ const getStudents_timeline = async (req, res) => {
   inner join workplace w on
     w.workplace_id = wh.workplace_history_id
   where
-    s.student_id = '${req.params.id}'`);
+    s.student_id = '${req.params.id}'
+  ORDER BY 
+    wh.start_work DESC`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -697,6 +699,8 @@ const updateEmail = async (req, res) => {
     res.send("Error " + err);
   }
 }
+
+
 
 // ---------------------------- Create By Section ---------------------- //
 

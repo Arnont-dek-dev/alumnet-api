@@ -711,8 +711,8 @@ const createWork = async (req, res) => {
     const result = await client.query(`with company as(INSERT INTO workplace (name) VALUES('${req.body.name}')
 
     )
-    INSERT INTO workplace_history (student_id, "position", start_work) VALUES('${req.body.student_id}', '${req.body.position}', 
-    '${req.body.start_work}')`);
+    INSERT INTO workplace_history (student_id, "position", start_work , finish_work) VALUES('${req.body.student_id}', '${req.body.position}', 
+    '${req.body.start_work}','${req.body.finish_work}')`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

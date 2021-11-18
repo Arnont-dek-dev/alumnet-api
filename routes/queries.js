@@ -606,7 +606,9 @@ const getStudents_timeline = async (req, res) => {
   inner join workplace w on
     w.workplace_id = wh.workplace_history_id
   where
-    s.student_id = '${req.params.id}'`);
+    s.student_id = '${req.params.id}'
+  ORDER BY 
+    wh.start_work DESC`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -698,6 +700,8 @@ const updateEmail = async (req, res) => {
   }
 }
 
+
+
 // ---------------------------- Create By Section ---------------------- //
 
 const createWork = async (req, res) => {
@@ -707,7 +711,7 @@ const createWork = async (req, res) => {
     const result = await client.query(`with company as(INSERT INTO workplace (name) VALUES('${req.body.name}')
 
     )
-    INSERT INTO workplace_history (student_id, "position", start_work) VALUES('${req.body.student_id}', '${req.body.position}', 
+    INSERT INTO workplace_history (student_id, "position", start_work ) VALUES('${req.body.student_id}', '${req.body.position}', 
     '${req.body.start_work}')`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);

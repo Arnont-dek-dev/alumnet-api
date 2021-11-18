@@ -717,7 +717,62 @@ const createWork = async (req, res) => {
   }
 }
 
+/////////////// additional section admin //////////////////
+
+const createEvent = async (req, res) => {
+  try {
+    const result = await client.query(`	insert into
+    public_relation (title,"content",image,start_activity,finish_activity,graduate_year,status,faculty_id,create_by,link_file)
+    values('${req.body.title}','${req.body.content}','${req.body.image}','${req.body.start_activity}','${req.body.finish_activity}','${req.body.graduate_year}','${req.body.status}',
+    ${req.body.faculty_id},'${req.body.create_by}','${req.body.link_file}')`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const updateEvent = async (req, res) => {
+  try {
+    const result = await client.query(`update public_relation set
+    title = '${req.body.title}',
+    "content" = '${req.body.content}',
+    image = '${req.body.image}',
+    start_activity = '${req.body.start_activity}',
+    finish_activity = '${req.body.finish_activity}',
+    graduate_year = '${req.body.graduate_year}',
+    status = '${req.body.status}',
+    faculty_id = ${req.body.faculty_id},
+    create_by = '${req.body.create_by}',
+    link_file = '${req.body.link_file}'
+    where public_relation_id = ${req.params.id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const deleteEvent = async (req, res) => {
+  try {
+    const result = await client.query(`DELETE FROM public_relation WHERE public_relation_id = ${req.params.id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 module.exports = {
+  // admin //
+  createEvent,
+  updateEvent,
+  deleteEvent,
+
   getStudents_byId,
   getdetailUniversity,
   getdetailprofile,

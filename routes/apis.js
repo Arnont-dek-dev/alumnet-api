@@ -73,4 +73,11 @@ router.put('/student/image_profile/:id',db.updateImage_profile);
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);
 
+// ------------------------------- Admin ------------------- //
+router.post('/admin/createevent',db.createEvent);
+router.put('/admin/updateevent',db.updateEvent);
+router.delete('/admin/deleteevent',db.deleteEvent);
+
+
+
 module.exports = router;

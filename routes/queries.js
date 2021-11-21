@@ -552,7 +552,6 @@ const getStudents_classdirectory = async (req, res) => {
   inner join major m on m.major_id = s.major_id 
   inner join faculty f on f.faculty_id = m.faculty_id 
   inner join campus c on c.campus_id = f.campus_id 
-  inner join public_relation pr on pr.public_relation_id = s.public_relation_id
   inner join workplace_history wh on wh.student_id = s.student_id 
   inner join workplace w on w.workplace_id = wh.workplace_id 
   where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);

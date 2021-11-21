@@ -62,6 +62,7 @@ router.get('/student/classdirectory/:major_id/:faculty_id/:campus_id/:graduate_y
 router.get('/student/detail/:id',db.getStudents_alldetail);
 router.get('/student/timeline/:id',db.getStudents_timeline);
 router.get('/admin/:id',db.getAdminByemail);
+router.get('/admin/:id',db.getSearch);
 
 
 
@@ -80,6 +81,8 @@ router.post('/admin/createevent',db.createEvent);
 router.put('/admin/updateevent/:id',db.updateEvent);
 router.delete('/admin/deleteevent',db.deleteEvent);
 router.get('/admin/getevent/:id',db.getEvent);
+router.get('/admin/getuserloginemailsystem',db.getuserloginemailsystem);
+router.get('/admin/getuserinsystem',db.getuserinsystem);
 
 
 

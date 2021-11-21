@@ -526,7 +526,6 @@ const getStudents_feed = async (req, res) => {
   inner join major m on m.major_id = s.major_id 
   inner join faculty f on f.faculty_id = m.faculty_id 
   inner join campus c on c.campus_id = f.campus_id 
-  inner join public_relation pr on pr.public_relation_id = s.public_relation_id
   inner join workplace_history wh on wh.student_id = s.student_id 
   inner join workplace w on w.workplace_id = wh.workplace_id 
   where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
@@ -553,7 +552,6 @@ const getStudents_classdirectory = async (req, res) => {
   inner join major m on m.major_id = s.major_id 
   inner join faculty f on f.faculty_id = m.faculty_id 
   inner join campus c on c.campus_id = f.campus_id 
-  inner join public_relation pr on pr.public_relation_id = s.public_relation_id
   inner join workplace_history wh on wh.student_id = s.student_id 
   inner join workplace w on w.workplace_id = wh.workplace_id 
   where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
@@ -620,6 +618,18 @@ const getStudents_timeline = async (req, res) => {
 const getAdminByemail = async (req, res) => {
   try {
     const result = await client.query(`SELECT email, faculty_id, campus_id, firstname, lastname FROM public."admin" where email = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const getSearch = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT  firstname, lastname,image_profile FROM student
+    where firstname like '${req.params.firstname}%' or lastname like '${req.params.lastname}%'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -831,6 +841,8 @@ module.exports = {
   createEvent,
   updateEvent,
   deleteEvent,
+  getuserloginemailsystem,
+  getuserinsystem,
 
   getStudents_byId,
   getdetailUniversity,
@@ -840,6 +852,7 @@ module.exports = {
   getStudents_timeline,
   getAdminByemail,
   getStudents_classdirectory,
+  getSearch,
 
   updateEpigramStatus,
   updateEmail,

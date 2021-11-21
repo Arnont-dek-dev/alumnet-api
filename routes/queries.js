@@ -619,7 +619,7 @@ const getStudents_timeline = async (req, res) => {
 
 const getAdminByemail = async (req, res) => {
   try {
-    const result = await client.query(`SELECT email, faculty_id, campus_id, fristname, lastname FROM public."admin" where email = '${req.params.id}'`);
+    const result = await client.query(`SELECT email, faculty_id, campus_id, firstname, lastname FROM public."admin" where email = '${req.params.id}'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -721,6 +721,23 @@ const createWork = async (req, res) => {
   }
 }
 
+const createWorkBefore = async (req, res) => {
+  try {
+    const time = moment().locale('th').format();
+    // const start_work = to_timestamp(req.body.start_work, 'YYYY-MM-DD')
+    const result = await client.query(`with company as(INSERT INTO workplace (name) VALUES('${req.body.name}')
+
+    )
+    INSERT INTO workplace_history (student_id, "position", start_work , finish_work) VALUES('${req.body.student_id}', '${req.body.position}', 
+    '${req.body.start_work}','${req.body.finish_work}')`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 /////////////// additional section admin //////////////////
 
 const createEvent = async (req, res) => {
@@ -760,6 +777,17 @@ const updateEvent = async (req, res) => {
   }
 }
 
+const getEvent = async (req, res) => {
+  try {
+    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 const deleteEvent = async (req, res) => {
   try {
     const result = await client.query(`DELETE FROM public_relation WHERE public_relation_id = ${req.params.id}`);
@@ -771,8 +799,34 @@ const deleteEvent = async (req, res) => {
   }
 }
 
+const getuserloginemailsystem = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT count(email) 
+    FROM student
+    where email != ''`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const getuserinsystem = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT count(student_id) 
+    FROM student`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 module.exports = {
   // admin //
+  getEvent,
   createEvent,
   updateEvent,
   deleteEvent,
@@ -791,6 +845,7 @@ module.exports = {
   updateImage_profile,
 
   createWork,
+  createWorkBefore,
 
   getStudents,
   createStudents,

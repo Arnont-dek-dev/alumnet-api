@@ -79,7 +79,7 @@ router.post('/student/workplacebefore',db.createWorkBefore);
 router.post('/admin/createevent',db.createEvent);
 router.put('/admin/updateevent',db.updateEvent);
 router.delete('/admin/deleteevent',db.deleteEvent);
-router.get('/admin/getevent/:id',db.deleteEvent);
+router.get('/admin/getevent/:id',db.getEvent);
 
 
 

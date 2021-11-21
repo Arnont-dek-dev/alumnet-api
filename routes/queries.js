@@ -788,6 +788,7 @@ const getEvent = async (req, res) => {
   }
 }
 
+
 const deleteEvent = async (req, res) => {
   try {
     const result = await client.query(`DELETE FROM public_relation WHERE public_relation_id = ${req.params.id}`);

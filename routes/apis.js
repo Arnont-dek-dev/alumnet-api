@@ -62,7 +62,7 @@ router.get('/student/classdirectory/:major_id/:faculty_id/:campus_id/:graduate_y
 router.get('/student/detail/:id',db.getStudents_alldetail);
 router.get('/student/timeline/:id',db.getStudents_timeline);
 router.get('/admin/:id',db.getAdminByemail);
-router.get('/admin/:id',db.getSearch);
+router.get('/student/search/:firstname/:lastname',db.getSearch);
 
 
 

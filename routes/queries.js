@@ -629,7 +629,7 @@ const getAdminByemail = async (req, res) => {
 const getSearch = async (req, res) => {
   try {
     const result = await client.query(`SELECT  firstname, lastname,image_profile FROM student
-    where firstname like '${req.params.firstname}%' or lastname like '${req.params.lastname}%'`);
+    where firstname like '%${req.params.firstname}%' or lastname like '%${req.params.lastname}%'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

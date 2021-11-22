@@ -79,7 +79,7 @@ router.post('/student/workplacebefore',db.createWorkBefore);
 // ------------------------------- Admin ------------------- //
 router.post('/admin/createevent',db.createEvent);
 router.put('/admin/updateevent/:id',db.updateEvent);
-router.delete('/admin/deleteevent',db.deleteEvent);
+router.delete('/admin/deleteevent/:id',db.deleteEvent);
 router.get('/admin/getevent/:id',db.getEvent);
 router.get('/admin/getuserloginemailsystem',db.getuserloginemailsystem);
 router.get('/admin/getuserinsystem',db.getuserinsystem);

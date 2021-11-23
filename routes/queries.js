@@ -667,7 +667,7 @@ const updateImage_profile = async (req, res) => {
 
 const updatefinishwork = async (req, res) => {
   try {
-    const result = await client.query(`update workplace_history set finish_work = '${req.params.finish_work}'
+    const result = await client.query(`update workplace_history set finish_work = '${req.body.finish_work}'
     where student_id = '${req.params.student_id}' and finish_work is null`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);

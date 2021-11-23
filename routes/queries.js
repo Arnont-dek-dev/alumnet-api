@@ -650,6 +650,35 @@ const getStudentcontactByid = async (req, res) => {
   }
 }
 
+const getSearchByGuess = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    s.firstname,
+    s.lastname,
+    s.image_profile,
+    m."name" as major,
+    f."name" as faculty,
+    c."name" as campus,
+    s.graduate_year 
+  from
+    student s
+  inner join major m on
+    m.major_id = s.major_id
+  inner join faculty f on
+    f.faculty_id = m.faculty_id
+  inner join campus c on
+    c.campus_id = f.campus_id
+  where
+    firstname like '${req.params.firstname}%'
+    or lastname like '${req.params.lastname}%'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -896,6 +925,7 @@ module.exports = {
   getStudents_classdirectory,
   getSearch,
   getStudentcontactByid,
+  getSearchByGuess,
 
   updateEpigramStatus,
   updateEmail,

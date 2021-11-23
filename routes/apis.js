@@ -65,6 +65,8 @@ router.get('/admin/:id',db.getAdminByemail);
 router.get('/student/search/:firstname/:lastname',db.getSearch);
 router.get('/student/studentcontact/:id',db.getStudentcontactByid);
 
+// --------------- Guess ------------------ //
+router.get('/search/:firstname/:lastname',db.getSearchByGuess);
 
 
 //  --------------------------- Edit By Section ------------------ // 

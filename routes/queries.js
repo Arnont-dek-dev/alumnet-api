@@ -798,6 +798,17 @@ const getEvent = async (req, res) => {
   }
 }
 
+const getEventBypublic_realation_id = async (req, res) => {
+  try {
+    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.faculty_id}' and public_relation_id = ${req.params.public_relation_id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 const deleteEvent = async (req, res) => {
   try {
@@ -838,6 +849,7 @@ const getuserinsystem = async (req, res) => {
 module.exports = {
   // admin //
   getEvent,
+  getEventBypublic_realation_id,
   createEvent,
   updateEvent,
   deleteEvent,

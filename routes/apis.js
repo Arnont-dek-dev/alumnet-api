@@ -81,6 +81,7 @@ router.post('/admin/createevent',db.createEvent);
 router.put('/admin/updateevent/:id',db.updateEvent);
 router.delete('/admin/deleteevent/:id',db.deleteEvent);
 router.get('/admin/getevent/:id',db.getEvent);
+router.get('/admin/geteventbyid/:faculty_id/:public_relation_id',db.getEventBypublic_realation_id);
 router.get('/admin/getuserloginemailsystem',db.getuserloginemailsystem);
 router.get('/admin/getuserinsystem',db.getuserinsystem);
 

@@ -528,7 +528,8 @@ const getStudents_feed = async (req, res) => {
   inner join campus c on c.campus_id = f.campus_id 
   inner join workplace_history wh on wh.student_id = s.student_id 
   inner join workplace w on w.workplace_id = wh.workplace_id 
-  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
+  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}' ORDER BY 
+  wh.start_work DESC `);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -803,7 +804,8 @@ const updateEvent = async (req, res) => {
 
 const getEvent = async (req, res) => {
   try {
-    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.id}'`);
+    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.id}' ORDER BY 
+    start_activity DESC`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -814,7 +816,8 @@ const getEvent = async (req, res) => {
 
 const getEventBypublic_realation_id = async (req, res) => {
   try {
-    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.faculty_id}' and public_relation_id = ${req.params.public_relation_id}`);
+    const result = await client.query(`select public_relation_id,title,"content",image,start_activity,finish_activity,link_file from public_relation where faculty_id = '${req.params.faculty_id}' and public_relation_id = ${req.params.public_relation_id} ORDER BY 
+    start_activity DESC`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

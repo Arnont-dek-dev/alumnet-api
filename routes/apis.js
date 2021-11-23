@@ -63,6 +63,7 @@ router.get('/student/detail/:id',db.getStudents_alldetail);
 router.get('/student/timeline/:id',db.getStudents_timeline);
 router.get('/admin/:id',db.getAdminByemail);
 router.get('/student/search/:firstname/:lastname',db.getSearch);
+router.get('/student/studentcontact/:id',db.getStudentcontactByid);
 
 
 

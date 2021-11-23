@@ -639,6 +639,17 @@ const getSearch = async (req, res) => {
   }
 }
 
+const getStudentcontactByid = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT student_contact_id, student_id, contact_type, contact_url FROM student_contact where student_id = '${req.params.id}' order by contact_type  `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -884,6 +895,7 @@ module.exports = {
   getAdminByemail,
   getStudents_classdirectory,
   getSearch,
+  getStudentcontactByid,
 
   updateEpigramStatus,
   updateEmail,

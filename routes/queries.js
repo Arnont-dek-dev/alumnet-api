@@ -680,6 +680,37 @@ const getSearchByGuess = async (req, res) => {
 }
 
 
+const getLatLongByid = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT lattitude, longitude FROM address where student_id ='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+const getLatLongAll = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    a.lattitude,
+    a.longitude ,
+    s.firstname ,
+    s.lastname
+  from
+    address a
+  inner join student s on
+    s.student_id = a.student_id
+  where
+    s.student_id != '${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 //  --------------------------- Edit By Section ------------------ // 
 const updateEpigramStatus = async (req, res) => {
@@ -905,6 +936,8 @@ const getuserinsystem = async (req, res) => {
   }
 }
 
+
+
 module.exports = {
   // admin //
   getEvent,
@@ -926,6 +959,8 @@ module.exports = {
   getSearch,
   getStudentcontactByid,
   getSearchByGuess,
+  getLatLongByid,
+  getLatLongAll,
 
   updateEpigramStatus,
   updateEmail,

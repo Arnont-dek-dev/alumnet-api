@@ -70,7 +70,7 @@ router.get('/student/search/:firstname/:lastname',db.getSearch);
 router.put('/student/epigram_status/:id',db.updateEpigramStatus);
 router.put('/student/updateemail/:id', db.updateEmail);
 router.put('/student/image_profile/:id',db.updateImage_profile);
-router.put('/student/currentjob/:student_id',db.updateImage_profile);
+router.put('/student/currentjob/:student_id',db.updatefinishwork);
 
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);

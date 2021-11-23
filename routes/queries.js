@@ -672,6 +672,7 @@ const updatefinishwork = async (req, res) => {
     where student_id = '${req.params.student_id}' and finish_work is null`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
+    console.log(time);
   } catch (err) {
     console.error(err);
     res.send("Error " + err);

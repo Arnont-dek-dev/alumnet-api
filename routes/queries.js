@@ -638,6 +638,8 @@ const getSearch = async (req, res) => {
   }
 }
 
+
+
 //  --------------------------- Edit By Section ------------------ // 
 const updateEpigramStatus = async (req, res) => {
   try {
@@ -653,7 +655,19 @@ const updateEpigramStatus = async (req, res) => {
 
 const updateImage_profile = async (req, res) => {
   try {
-    const result = await client.query(`UPDATE student SET  image_profile='${req.body.image_profile}' where student_id='${req.params.id}';`);
+    const result = await client.query(`UPDATE student SET  image_profile='${req.body.image_profile}' where student_id='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const updatefinishwork = async (req, res) => {
+  try {
+    const result = await client.query(`update workplace_history set finish_work = '${req.params.finish_work}'
+    where student_id = '${req.params.student_id}' and finish_work is null`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -869,6 +883,7 @@ module.exports = {
   updateEpigramStatus,
   updateEmail,
   updateImage_profile,
+  updatefinishwork,
 
   createWork,
   createWorkBefore,

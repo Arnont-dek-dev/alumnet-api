@@ -29,6 +29,7 @@ const getStudents = async (req, res) => {
 
 const createStudents = async (req, res) => {
   try {
+    console.log(req.body);
     const result = await client.query(`INSERT INTO student (student_id, firstname, lastname, dob, sex, email, epigram, status, education_status, graduate_year, major_id, public_relation_id, image_profile) 
       VALUES('${req.body.student_id}', '${req.body.firstname}', '${req.body.lastname}', '${req.body.dob}', '${req.body.sex}', '${req.body.email}', '${req.body.epigram}', 
       '${req.body.status}', '${req.body.education_status}', '${req.body.graduate_year}', ${req.body.major_id}, ${req.body.public_relation_id}, '${req.body.image_profile}')`);
@@ -710,6 +711,28 @@ const getLatLongAll = async (req, res) => {
     res.send("Error " + err);
   }
 }
+const getLatLongAllForAdmin = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    a.lattitude,
+    a.longitude ,
+    s.firstname ,
+    s.lastname
+from
+	student s
+	inner join major m on m.major_id = s.major_id 
+	inner join faculty f on f.faculty_id = m.faculty_id 
+	inner join campus c on c.campus_id = f.campus_id 
+	inner join address a on a.student_id = s.student_id 
+	inner join "admin" a2 on a2.faculty_id = f.faculty_id 
+	where f.faculty_id = ${req.params.id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -947,6 +970,7 @@ module.exports = {
   deleteEvent,
   getuserloginemailsystem,
   getuserinsystem,
+  getLatLongAllForAdmin,
 
   getStudents_byId,
   getdetailUniversity,

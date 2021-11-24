@@ -81,6 +81,9 @@ router.put('/student/currentjob/:student_id',db.updatefinishwork);
 router.post('/student/workplace',db.createWork);
 router.post('/student/workplacebefore',db.createWorkBefore);
 
+// ------------------------- Delete By Section --------------------- //
+
+router.delete('/student/studentcontact/:id',db.deleteStudentContactType);
 
 // ------------------------------- Admin ------------------- //
 router.post('/admin/createevent',db.createEvent);

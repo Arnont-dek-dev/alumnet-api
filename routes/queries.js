@@ -859,6 +859,22 @@ const createWorkBefore = async (req, res) => {
   }
 }
 
+
+////////////////  Delete section By ID  ///////////////////
+
+const deleteStudentContactType = async (req, res) => {
+  try {
+    const result = await client.query(`DELETE FROM student_contact WHERE  student_contact_id= ${req.params.id} `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
+
 /////////////// additional section admin //////////////////
 
 const createEvent = async (req, res) => {
@@ -993,6 +1009,8 @@ module.exports = {
 
   createWork,
   createWorkBefore,
+
+  deleteStudentContactType,
 
   getStudents,
   createStudents,

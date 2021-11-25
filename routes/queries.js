@@ -980,8 +980,7 @@ from
 
 const countStudentUsedSystem = async (req, res) => {
   try {
-    const result = await client.query(`SELECT count(student_id) 
-    FROM student`);
+    const result = await client.query(`select  count(email) email from student s where email != '' `);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {

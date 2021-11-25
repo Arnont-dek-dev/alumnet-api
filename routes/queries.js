@@ -711,28 +711,7 @@ const getLatLongAll = async (req, res) => {
     res.send("Error " + err);
   }
 }
-const getLatLongAllForAdmin = async (req, res) => {
-  try {
-    const result = await client.query(`select
-    a.lattitude,
-    a.longitude ,
-    s.firstname ,
-    s.lastname
-from
-	student s
-	inner join major m on m.major_id = s.major_id 
-	inner join faculty f on f.faculty_id = m.faculty_id 
-	inner join campus c on c.campus_id = f.campus_id 
-	inner join address a on a.student_id = s.student_id 
-	inner join "admin" a2 on a2.faculty_id = f.faculty_id 
-	where f.faculty_id = ${req.params.id}`);
-    const results = { 'results': (result) ? result.rows : null };
-    res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.send("Error " + err);
-  }
-}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -975,6 +954,124 @@ const getuserinsystem = async (req, res) => {
   }
 }
 
+const getLatLongAllForAdmin = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    a.lattitude,
+    a.longitude ,
+    s.firstname ,
+    s.lastname
+from
+	student s
+	inner join major m on m.major_id = s.major_id 
+	inner join faculty f on f.faculty_id = m.faculty_id 
+	inner join campus c on c.campus_id = f.campus_id 
+	inner join address a on a.student_id = s.student_id 
+	inner join "admin" a2 on a2.faculty_id = f.faculty_id 
+	where f.faculty_id = ${req.params.id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
+const countStudentUsedSystem = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT count(student_id) 
+    FROM student`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const countStudentWork = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    m.name, 
+   count(distinct(wh.student_id))
+ from
+   student s
+ inner join workplace_history wh on
+   wh.student_id = s.student_id
+ inner join major m on
+   m.major_id = s.major_id
+ inner join faculty f on
+   f.faculty_id = m.faculty_id
+ inner join campus c on
+   c.campus_id = f.campus_id
+ where
+   f.faculty_id = '${req.params.id}'
+ group by
+   m.major_id ,
+   m.name`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const countStudentAddress = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    a.province ,
+    count(distinct(a.student_id))
+  from
+    student s
+  inner join major m on
+    m.major_id = s.major_id
+  inner join faculty f on
+    f.faculty_id = m.faculty_id
+  inner join campus c on
+    c.campus_id = f.campus_id
+  inner join address a on
+    a.student_id = s.student_id
+  inner join "admin" a2 on
+    a2.faculty_id = f.faculty_id
+  where
+    f.faculty_id = '${req.params.id}'
+  group by
+    a.province`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const countStudentGraduteyear = async (req, res) => {
+  try {
+    const result = await client.query(`select
+    count(s.graduate_year) ,
+    s.graduate_year
+  from
+    student s
+  inner join major m on
+    m.major_id = s.major_id
+  inner join faculty f on
+    f.faculty_id = m.faculty_id
+  inner join campus c on
+    c.campus_id = f.campus_id
+  where
+    f.faculty_id = '${req.params.id}'
+  group by
+    s.graduate_year `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 module.exports = {
@@ -987,6 +1084,10 @@ module.exports = {
   getuserloginemailsystem,
   getuserinsystem,
   getLatLongAllForAdmin,
+  countStudentUsedSystem,
+  countStudentWork,
+  countStudentAddress,
+  countStudentGraduteyear,
 
   getStudents_byId,
   getdetailUniversity,

@@ -94,6 +94,10 @@ router.get('/admin/geteventbyid/:faculty_id/:public_relation_id',db.getEventBypu
 router.get('/admin/getuserloginemailsystem',db.getuserloginemailsystem);
 router.get('/admin/getuserinsystem',db.getuserinsystem);
 router.get('/admin/latlong/:id',db.getLatLongAllForAdmin);
+router.get('/admin/dashboard/usedsystem/:id',db.countStudentUsedSystem);
+router.get('/admin/dashboard/userwork/:id',db.countStudentWork);
+router.get('/admin/dashboard/useraddress/:id',db.countStudentAddress);
+router.get('/admin/dashboard/graduateyear/:id',db.countStudentGraduteyear);
 
 
 

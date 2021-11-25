@@ -712,6 +712,17 @@ const getLatLongAll = async (req, res) => {
   }
 }
 
+const getLocationByid = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT  "Province", amphone, tumbon, code FROM code_csv where code = '${req.params.id}' `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -1073,6 +1084,9 @@ const countStudentGraduteyear = async (req, res) => {
 
 
 
+
+
+
 module.exports = {
   // admin //
   getEvent,
@@ -1101,6 +1115,7 @@ module.exports = {
   getSearchByGuess,
   getLatLongByid,
   getLatLongAll,
+  getLocationByid,
 
   updateEpigramStatus,
   updateEmail,

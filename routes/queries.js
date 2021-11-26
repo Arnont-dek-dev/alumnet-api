@@ -763,6 +763,19 @@ const updatefinishwork = async (req, res) => {
   }
 }
 
+const updateLatLong = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE address SET lattitude=${req.params.lat}, longitude=${req.params.long} where student_id = '${req.params.student_id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+    console.log(time);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
 const getdetailUniversity = async (req, res) => {
   try {
     const result = await client.query(`SELECT  s.student_id ,s.firstname ,s.lastname , m."name" as "major", f."name"as "faculty", c."name"as "campus"
@@ -1165,6 +1178,7 @@ module.exports = {
   updateEmail,
   updateImage_profile,
   updatefinishwork,
+  updateLatLong,
 
   createWork,
   createWorkBefore,

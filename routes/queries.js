@@ -849,6 +849,20 @@ const createWorkBefore = async (req, res) => {
   }
 }
 
+const createAddressByid = async (req, res) => {
+  try {
+    const time = moment().locale('th').format();
+    // const start_work = to_timestamp(req.body.start_work, 'YYYY-MM-DD')
+    const result = await client.query(`INSERT INTO address (student_id, tumbon, amphone, province, postcode, country) 
+    VALUES('${req.params.id}', '${req.body.tumbon}', '${req.body.amphone}', '${req.body.province}', '${req.body.postcode}', '${req.body.country}')`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 ////////////////  Delete section By ID  ///////////////////
 
@@ -1154,6 +1168,7 @@ module.exports = {
 
   createWork,
   createWorkBefore,
+  createAddressByid,
 
   deleteStudentContactType,
 

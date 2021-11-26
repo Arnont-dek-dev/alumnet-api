@@ -82,7 +82,7 @@ router.put('/student/latlong/:lat/:long/:student_id',db.updateLatLong);
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);
 router.post('/student/workplacebefore',db.createWorkBefore);
-router.post('/student/addressbyid',db.createAddressByid);
+router.post('/student/addressbyid/:id',db.createAddressByid);
 
 // ------------------------- Delete By Section --------------------- //
 

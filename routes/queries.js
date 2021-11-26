@@ -768,7 +768,6 @@ const updateLatLong = async (req, res) => {
     const result = await client.query(`UPDATE address SET lattitude=${req.params.lat}, longitude=${req.params.long} where student_id = '${req.params.student_id}'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
-    console.log(time);
   } catch (err) {
     console.error(err);
     res.send("Error " + err);

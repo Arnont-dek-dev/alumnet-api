@@ -1027,6 +1027,35 @@ const countStudentWork = async (req, res) => {
     res.send("Error " + err);
   }
 }
+const countStudentWorkByPosition = async (req, res) => {
+  try {
+    const result = await client.query(`select
+      wh."position" ,
+      count(distinct(wh.student_id))
+    from
+      student s
+    inner join workplace_history wh on
+      wh.student_id = s.student_id
+    inner join major m on
+      m.major_id = s.major_id
+    inner join faculty f on
+      f.faculty_id = m.faculty_id
+    inner join campus c on
+      c.campus_id = f.campus_id
+    inner join workplace_history wh2 on
+      wh.student_id = s.student_id
+    where
+      f.faculty_id = '${req.params.id}'
+    group by
+      m.major_id ,
+      wh."position" `);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
 
 const countStudentAddress = async (req, res) => {
   try {
@@ -1101,6 +1130,7 @@ module.exports = {
   countStudentWork,
   countStudentAddress,
   countStudentGraduteyear,
+  countStudentWorkByPosition,
 
   getStudents_byId,
   getdetailUniversity,

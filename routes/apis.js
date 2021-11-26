@@ -78,6 +78,7 @@ router.put('/student/updateemail/:id', db.updateEmail);
 router.put('/student/image_profile/:id',db.updateImage_profile);
 router.put('/student/currentjob/:student_id',db.updatefinishwork);
 router.put('/student/latlong/:lat/:long/:student_id',db.updateLatLong);
+router.put('/student/addresslocation/:id',db.updateAddressLocation);
 
 // ------------------------------- Create By Section ------------------- //
 router.post('/student/workplace',db.createWork);

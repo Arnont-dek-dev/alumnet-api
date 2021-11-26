@@ -823,6 +823,18 @@ const updateEmail = async (req, res) => {
   }
 }
 
+const updateAddressLocation = async (req, res) => {
+  try {
+    const result = await client.query(`UPDATE address SET  tumbon='${req.body.tumbon}', amphone='${req.body.amphone}', province='${req.body.province}', postcode='${req.body.postcode}', country='${req.body.country}' where student_id ='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 // ---------------------------- Create By Section ---------------------- //
@@ -1178,6 +1190,7 @@ module.exports = {
   updateImage_profile,
   updatefinishwork,
   updateLatLong,
+  updateAddressLocation,
 
   createWork,
   createWorkBefore,

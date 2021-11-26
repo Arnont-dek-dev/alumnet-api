@@ -723,6 +723,17 @@ const getLocationByid = async (req, res) => {
   }
 }
 
+const getLocationByStudentid = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT tumbon, amphone, province, postcode FROM address where student_id ='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -1184,6 +1195,7 @@ module.exports = {
   getLatLongByid,
   getLatLongAll,
   getLocationByid,
+  getLocationByStudentid,
 
   updateEpigramStatus,
   updateEmail,

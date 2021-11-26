@@ -67,6 +67,7 @@ router.get('/student/studentcontact/:id',db.getStudentcontactByid);
 router.get('/student/latlongbyid/:id',db.getLatLongByid);
 router.get('/student/latlongall/:id',db.getLatLongAll);
 router.get('/student/locationbyapi/:id',db.getLocationByid);
+router.get('/student/addresslocationbystudentid/:id',db.getLocationByStudentid);
 
 // --------------- Guess ------------------ //
 router.get('/search/:firstname/:lastname',db.getSearchByGuess);

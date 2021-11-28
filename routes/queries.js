@@ -596,7 +596,7 @@ const getStudents_classdirectory = async (req, res) => {
     s.lastname,
     s.image_profile,
     a.province,
-    a.country,
+    a.country
     from
     student s
   inner join major m on m.major_id = s.major_id 

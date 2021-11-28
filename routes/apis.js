@@ -53,6 +53,11 @@ router.post('/workplace_history',db.createWorkplace_history);
 router.put('/workplace_history/:id',db.updateWorkplace_history);
 router.delete('/workplace_history/:id',db.deleteWorkplace_history);
 
+router.get('/messaging',db.getmessaging);
+router.post('/messaging',db.createmessaging);
+router.put('/messaging/:id',db.updatemessaging);
+router.delete('/messaging/:id',db.deletemessaging);
+
 // -------------- get By ID ------------------ //
 router.get('/student/:id',db.getStudents_byId);
 router.get('/student/infomation/:id',db.getdetailUniversity);
@@ -106,7 +111,10 @@ router.get('/admin/dashboard/graduateyear/:id',db.countStudentGraduteyear);
 router.get('/admin/dashboard/workposition/:id',db.countStudentWorkByPosition);
 
 // -------------------- google sheet -------------------- //
-router.get('/admin/deletegooglesheet',db.deletegooglesheet)
+router.post('/admin/deletegooglesheet',db.deletegooglesheet)
+
+// --------------------- notification ------------------- //
+router.post('/admin/notification',db.notification)
 
 
 

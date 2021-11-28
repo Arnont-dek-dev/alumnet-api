@@ -1,6 +1,7 @@
 const { request } = require('express');
 const moment = require('moment');
-const {google} = require('googleapis');
+const { token } = require('morgan');
+
 const { Pool } = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL = 'postgresql://emxscnsfesbxcy:911fd3b39c19e7b30c94b0965174e752c08686a2b66d5b3e77113c769aee2665@ec2-23-22-243-103.compute-1.amazonaws.com:5432/ddi7pvl5ctf0lr',
@@ -501,6 +502,53 @@ const deleteWorkplace_history = async (req, res) => {
   }
 }
 
+// --------------- Table messaging ------------------//
+const getmessaging = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT student_id, token_id FROM messaging`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const createmessaging = async (req, res) => {
+  try {
+    console.log(req.body);
+    const result = await client.query(`INSERT INTO messaging (student_id, token_id) VALUES('${req.body.student_id}', '${req.body.token_id}')`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const updatemessaging = async (req, res) => {
+  try {
+    const result = await client.query(`UUPDATE messaging SET token_id='${req.body.token_id}' where student_id = '${req.params.id}`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+const deletemessaging = async (req, res) => {
+  try {
+    const result = await client.query(`DELETE FROM messaging WHERE student_id='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
 // ------------------- Get By ID -------------------- //
 
 const getStudents_byId = async (req, res) => {
@@ -549,15 +597,13 @@ const getStudents_classdirectory = async (req, res) => {
     s.image_profile,
     a.province,
     a.country,
-    wh."position"
     from
     student s
   inner join major m on m.major_id = s.major_id 
   inner join faculty f on f.faculty_id = m.faculty_id 
   inner join campus c on c.campus_id = f.campus_id 
-  inner join workplace_history wh on wh.student_id = s.student_id 
   inner join address a on a.student_id = s.student_id
-  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}' and wh.finish_work is null`);
+  where s.major_id ='${req.params.major_id}' and f.faculty_id ='${req.params.faculty_id}' and c.campus_id ='${req.params.campus_id}' and s.graduate_year ='${req.params.graduate_year}'`);
     const results = { 'results': (result) ? result.rows : null };
     res.json(results);
   } catch (err) {
@@ -1167,62 +1213,148 @@ const countStudentGraduteyear = async (req, res) => {
 
 
 
-const deletegooglesheet=  async (req,res) => {
-// BEFORE RUNNING:
-// ---------------
-// 1. If not already done, enable the Google Sheets API
-//    and check the quota for your project at
-//    https://console.developers.google.com/apis/api/sheets
-// 2. Install the Node.js client library by running
-//    `npm install googleapis --save`
+const deletegooglesheet = async (req, res) => {
+  // BEFORE RUNNING:
+  // ---------------
+  // 1. If not already done, enable the Google Sheets API
+  //    and check the quota for your project at
+  //    https://console.developers.google.com/apis/api/sheets
+  // 2. Install the Node.js client library by running
+  //    `npm install googleapis --save`
 
+  const { google } = require('googleapis');
+  const sheets = google.sheets('v4');
 
-const sheets = google.sheets('v4');
+  async function main() {
+    const authClient = await authorize();
+    const request = {
+      // The ID of the spreadsheet to update.
+      spreadsheetId: "1L0p43e9RCRS_0sjcz7xz35Uoi5Ev2PxklGUGHeLPSlA",  // TODO: Update placeholder value.
 
-async function main () {
-  const authClient = await authorize();
-  const request = {
-    // The ID of the spreadsheet to update.
-    spreadsheetId: "1L0p43e9RCRS_0sjcz7xz35Uoi5Ev2PxklGUGHeLPSlA",  // TODO: Update placeholder value.
+      // The A1 notation of the values to clear.
+      range: "Sheet1!A2:L300",  // TODO: Update placeholder value.
 
-    // The A1 notation of the values to clear.
-    clearedRange: "Sheet1!A2:L300",  // TODO: Update placeholder value.
+      resource: {
+        // TODO: Add desired properties to the request body.
+      },
 
-    resource: {
-      // TODO: Add desired properties to the request body.
-    },
+      auth: authClient,
+    };
 
-    auth: authClient,
-  };
+    try {
+      // console.log(authClient);
+      // console.log(request);
+      const response = (await sheets.spreadsheets.values.clear(request)).data;
+      // TODO: Change code below to process the `response` object:
+      console.log(JSON.stringify(response, null, 2));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  console.log("hello");
+  main();
 
-  try {
-    const response = (await sheets.spreadsheets.values.clear(request)).data;
-    // TODO: Change code below to process the `response` object:
-    console.log(JSON.stringify(response, null, 2));
-  } catch (err) {
-    console.error(err);
+  async function authorize() {
+    // TODO: Change placeholder below to generate authentication credentials. See
+    // https://developers.google.com/sheets/quickstart/nodejs#step_3_set_up_the_sample
+    //
+    // Authorize using one of the following scopes:
+    //   'https://www.googleapis.com/auth/drive'
+    //   'https://www.googleapis.com/auth/drive.file'
+    //   'https://www.googleapis.com/auth/spreadsheets'
+    let authClient = 'nongnont.170442@gmail.com';
+
+    if (authClient == null) {
+      throw Error('authentication failed');
+    }
+
+    return authClient;
   }
 }
-main();
 
-async function authorize() {
-  // TODO: Change placeholder below to generate authentication credentials. See
-  // https://developers.google.com/sheets/quickstart/nodejs#step_3_set_up_the_sample
-  //
-  // Authorize using one of the following scopes:
-  //   'https://www.googleapis.com/auth/drive'
-  //   'https://www.googleapis.com/auth/drive.file'
-  //   'https://www.googleapis.com/auth/spreadsheets'
-  let authClient = null;
 
-  if (authClient == null) {
-    throw Error('authentication failed');
+///////// notification /////
+
+const notification = async (req, res) => {
+  const admin = require('firebase-admin')
+  const { google } = require('googleapis')
+  const axios = require('axios')
+  const ProjectId = "alumnet-project";
+
+  const MESSAGING_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
+  const SCOPES = [MESSAGING_SCOPE]
+
+  const serviceAccount = require('../alumnet-project-firebase-adminsdk-d6mkt-39c820e946.json')
+  const databaseURL = 'https://alumnet-project-default-rtdb.firebaseio.com'
+  const URL =
+    `https://fcm.googleapis.com/v1/projects/${ProjectId}/messages:send`
+  const deviceToken =
+    'dNHKlWlPS-7bX25MZhMtjl:APA91bFKuvJn-beZNDqA2NKBvs6aHNPlWjUWy2Es0HWQIV4HL_CyXx0W2Q1SLwXLVXF_y9R90hecfFQwQNBB9Ci1B-hjp6vXnWj-oyZPUgUipvUbxzkx4jfBj30eqnPMbhxjLDZzUzOH'
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: databaseURL
+  })
+
+  function getAccessToken() {
+    return new Promise(function (resolve, reject) {
+      var key = serviceAccount
+      var jwtClient = new google.auth.JWT(
+        key.client_email,
+        null,
+        key.private_key,
+        SCOPES,
+        null
+      )
+      jwtClient.authorize(function (err, tokens) {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve(tokens.access_token)
+      })
+    })
   }
 
-  return authClient;
-}
-}
+  async function init() {
+    const body = {
+      message: {
+        data: { key: 'value' },
+        notification: {
+          title: `'${req.body.titles}'`,
+          body: `'${req.body.content}'`
+        },
+        webpush: {
+          headers: {
+            Urgency: 'high'
+          },
+          notification: {
+            requireInteraction: 'true'
+          }
+        },
+        token: deviceToken
+      }
+    }
 
+    try {
+      const accessToken = await getAccessToken()
+      console.log('accessToken: ', accessToken)
+      const { data } = await axios.post(URL, JSON.stringify(body), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      console.log('name: ', data.name)
+    } catch (err) {
+      console.log('err: ', err.message)
+    }
+  }
+
+  init()
+
+
+}
 
 
 
@@ -1235,9 +1367,13 @@ async function authorize() {
 
 
 module.exports = {
-//google sheet //
 
-deletegooglesheet,
+  // notification //
+  notification,
+
+  //google sheet //
+
+  deletegooglesheet,
 
 
   // admin //
@@ -1270,6 +1406,7 @@ deletegooglesheet,
   getLatLongAll,
   getLocationByid,
   getLocationByStudentid,
+
 
   updateEpigramStatus,
   updateEmail,
@@ -1323,5 +1460,9 @@ deletegooglesheet,
   getWorkplace_history,
   createWorkplace_history,
   updateWorkplace_history,
-  deleteWorkplace_history
+  deleteWorkplace_history,
+  getmessaging,
+  createmessaging,
+  updatemessaging,
+  deletemessaging
 }

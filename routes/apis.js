@@ -109,6 +109,7 @@ router.get('/admin/dashboard/userwork/:id',db.countStudentWork);
 router.get('/admin/dashboard/useraddress/:id',db.countStudentAddress);
 router.get('/admin/dashboard/graduateyear/:id',db.countStudentGraduteyear);
 router.get('/admin/dashboard/workposition/:id',db.countStudentWorkByPosition);
+router.get('/student/messaging/:id',db.getmessagingByid);
 
 // -------------------- google sheet -------------------- //
 router.post('/admin/deletegooglesheet',db.deletegooglesheet)

@@ -781,6 +781,17 @@ const getLocationByStudentid = async (req, res) => {
   }
 }
 
+const getmessagingByid = async (req, res) => {
+  try {
+    const result = await client.query(`SELECT student_id, token_id FROM messaging where student_id='${req.params.id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
 
 
 //  --------------------------- Edit By Section ------------------ // 
@@ -1406,6 +1417,7 @@ module.exports = {
   getLatLongAll,
   getLocationByid,
   getLocationByStudentid,
+  getmessagingByid,
 
 
   updateEpigramStatus,

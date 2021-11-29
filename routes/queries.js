@@ -794,6 +794,8 @@ const getmessagingByid = async (req, res) => {
 
 
 
+
+
 //  --------------------------- Edit By Section ------------------ // 
 const updateEpigramStatus = async (req, res) => {
   try {
@@ -1218,6 +1220,34 @@ const countStudentGraduteyear = async (req, res) => {
   }
 }
 
+const getTokenonlyByid = async (req, res) => {
+  try {
+    const result = await client.query(`select 
+	m.token_id
+from
+	messaging m
+inner join student s on
+	s.student_id = m.student_id
+inner join major m2 on
+	m2.major_id = s.major_id
+inner join faculty f on
+	f.faculty_id = m2.faculty_id
+inner join campus c on
+	c.campus_id = f.campus_id
+inner join "admin" a on
+	a.faculty_id = f.faculty_id
+where
+	a.faculty_id = '${req.params.faculty_id}'
+	and a.campus_id = '${req.params.campus_id}'`);
+    const results = { 'results': (result) ? result.rows : null };
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+}
+
+
 
 
 /////////////////////////////////////// google sheet ///////////////////////////////////////////
@@ -1299,73 +1329,81 @@ const notification = async (req, res) => {
   const databaseURL = 'https://alumnet-project-default-rtdb.firebaseio.com'
   const URL =
     `https://fcm.googleapis.com/v1/projects/${ProjectId}/messages:send`
-  const deviceToken =
-    'dNHKlWlPS-7bX25MZhMtjl:APA91bFKuvJn-beZNDqA2NKBvs6aHNPlWjUWy2Es0HWQIV4HL_CyXx0W2Q1SLwXLVXF_y9R90hecfFQwQNBB9Ci1B-hjp6vXnWj-oyZPUgUipvUbxzkx4jfBj30eqnPMbhxjLDZzUzOH'
+    const deviceToken =[
+          'cMhoX5SvBQzkdPFwmdNbmp:APA91bESjvXp95sxRqFroUSHUzEQg0yplFGbg5TfxsGmZ43ZFTxRCEDPiGlxAdyq3CX-v1wUlmwUP1-0PhHDqSn3VsrZyKzMGv4okmkc_htIY4GZokWAdtfYIMiTML0ldZb4jesluOTJ',
+          'e58PJOhZUdsNFNC4HEdh9j:APA91bGf0CQw7VZj0lOzVEBLhCwdtCdnJAN8xcEaewUWo-Sc5qznVdjuaUJz7LoTjCWBLJ_EHXdQAa63lkVk_7VnKAdzr7fqHyDcHfIDfSBVy-hWJU92Lsgnr9YpXFeHXOqAEGyYJdy_'
+    ]
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: databaseURL
-  })
-
-  function getAccessToken() {
-    return new Promise(function (resolve, reject) {
-      var key = serviceAccount
-      var jwtClient = new google.auth.JWT(
-        key.client_email,
-        null,
-        key.private_key,
-        SCOPES,
-        null
-      )
-      jwtClient.authorize(function (err, tokens) {
-        if (err) {
-          reject(err)
-          return
-        }
-        resolve(tokens.access_token)
+      
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: databaseURL
       })
-    })
-  }
-
-  async function init() {
-    const body = {
-      message: {
-        data: { key: 'value' },
-        notification: {
-          title: `'${req.body.titles}'`,
-          body: `'${req.body.content}'`
-        },
-        webpush: {
-          headers: {
-            Urgency: 'high'
-          },
-          notification: {
-            requireInteraction: 'true'
-          }
-        },
-        token: deviceToken
+      
+      function getAccessToken() {
+        return new Promise(function(resolve, reject) {
+          var key = serviceAccount
+          var jwtClient = new google.auth.JWT(
+            key.client_email,
+            null,
+            key.private_key,
+            SCOPES,
+            null
+          )
+          jwtClient.authorize(function(err, tokens) {
+            if (err) {
+              reject(err)
+              return
+            }
+            resolve(tokens.access_token)
+          })
+        })
       }
-    }
-
-    try {
-      const accessToken = await getAccessToken()
-      console.log('accessToken: ', accessToken)
-      const { data } = await axios.post(URL, JSON.stringify(body), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`
+      
+      async function init() {
+        const body = {
+          message: {
+            data: { key: 'value' },
+            notification: {
+              title:`'${req.body.titles}'`,
+              body: `'${req.body.content}'`
+            },
+            webpush: {
+              headers: {
+                Urgency: 'high'
+              },
+              notification: {
+                requireInteraction: 'true'
+              }
+            },
+            token: deviceToken
+          }
         }
-      })
-      console.log('name: ', data.name)
-    } catch (err) {
-      console.log('err: ', err.message)
+      
+        try {
+          const accessToken = await getAccessToken()
+          console.log('accessToken: ', accessToken)
+          const { data } = await axios.post(URL, JSON.stringify(body), {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            }
+          })
+          console.log('name: ', data.name)
+        } catch (err) {
+          console.log('err: ', err.message)
+        }
+      }
+      for (let index = 0; index < deviceToken.length; index++) {
+        const element = deviceToken[index];
+      
+        console.log(element);
+        init()
+      }
+      
     }
-  }
-
-  init()
 
 
-}
 
 
 
@@ -1401,6 +1439,7 @@ module.exports = {
   countStudentAddress,
   countStudentGraduteyear,
   countStudentWorkByPosition,
+  getTokenonlyByid,
 
   getStudents_byId,
   getdetailUniversity,

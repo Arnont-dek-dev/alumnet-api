@@ -73,6 +73,7 @@ router.get('/student/latlongbyid/:id',db.getLatLongByid);
 router.get('/student/latlongall/:id',db.getLatLongAll);
 router.get('/student/locationbyapi/:id',db.getLocationByid);
 router.get('/student/addresslocationbystudentid/:id',db.getLocationByStudentid);
+router.get('/student/messaging/:id',db.getmessagingByid);
 
 // --------------- Guess ------------------ //
 router.get('/search/:firstname/:lastname',db.getSearchByGuess);
@@ -109,7 +110,7 @@ router.get('/admin/dashboard/userwork/:id',db.countStudentWork);
 router.get('/admin/dashboard/useraddress/:id',db.countStudentAddress);
 router.get('/admin/dashboard/graduateyear/:id',db.countStudentGraduteyear);
 router.get('/admin/dashboard/workposition/:id',db.countStudentWorkByPosition);
-router.get('/student/messaging/:id',db.getmessagingByid);
+router.get('/admin/tokenonly/:faculty_id/:campus_id',db.getTokenonlyByid);
 
 // -------------------- google sheet -------------------- //
 router.post('/admin/deletegooglesheet',db.deletegooglesheet)

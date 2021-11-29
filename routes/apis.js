@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const db = require('./queries');
+const fcm = require('./fcm');
 
 //  ---------  Router CRUD ALL Table ---------- //
 router.get('/student',db.getStudents);
@@ -116,7 +117,8 @@ router.get('/admin/tokenonly/:faculty_id/:campus_id',db.getTokenonlyByid);
 router.post('/admin/deletegooglesheet',db.deletegooglesheet)
 
 // --------------------- notification ------------------- //
-router.post('/admin/notification',db.notification)
+// router.post('/admin/notification',db.notification)
+router.post('/admin/fcm',fcm.notification)
 
 
 

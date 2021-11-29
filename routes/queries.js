@@ -1,6 +1,8 @@
 const { request } = require('express');
+const { firebase } = require('googleapis/build/src/apis/firebase');
 const moment = require('moment');
 const { token } = require('morgan');
+const admin = require('firebase-admin')
 
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -1315,6 +1317,13 @@ const deletegooglesheet = async (req, res) => {
 
 
 ///////// notification /////
+const serviceAccount = require('../alumnet-project-firebase-adminsdk-d6mkt-39c820e946.json')
+const databaseURL = 'https://alumnet-project-default-rtdb.firebaseio.com'
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: databaseURL
+})
 
 const notification = async (req, res) => {
   const admin = require('firebase-admin')
@@ -1325,83 +1334,130 @@ const notification = async (req, res) => {
   const MESSAGING_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
   const SCOPES = [MESSAGING_SCOPE]
 
-  const serviceAccount = require('../alumnet-project-firebase-adminsdk-d6mkt-39c820e946.json')
-  const databaseURL = 'https://alumnet-project-default-rtdb.firebaseio.com'
+
   const URL =
     `https://fcm.googleapis.com/v1/projects/${ProjectId}/messages:send`
-    const deviceToken =[
-          'cMhoX5SvBQzkdPFwmdNbmp:APA91bESjvXp95sxRqFroUSHUzEQg0yplFGbg5TfxsGmZ43ZFTxRCEDPiGlxAdyq3CX-v1wUlmwUP1-0PhHDqSn3VsrZyKzMGv4okmkc_htIY4GZokWAdtfYIMiTML0ldZb4jesluOTJ',
-          'e58PJOhZUdsNFNC4HEdh9j:APA91bGf0CQw7VZj0lOzVEBLhCwdtCdnJAN8xcEaewUWo-Sc5qznVdjuaUJz7LoTjCWBLJ_EHXdQAa63lkVk_7VnKAdzr7fqHyDcHfIDfSBVy-hWJU92Lsgnr9YpXFeHXOqAEGyYJdy_'
-    ]
+  // const deviceToken =[
+  //       'cMhoX5SvBQzkdPFwmdNbmp:APA91bESjvXp95sxRqFroUSHUzEQg0yplFGbg5TfxsGmZ43ZFTxRCEDPiGlxAdyq3CX-v1wUlmwUP1-0PhHDqSn3VsrZyKzMGv4okmkc_htIY4GZokWAdtfYIMiTML0ldZb4jesluOTJ',
+  //       'e58PJOhZUdsNFNC4HEdh9j:APA91bGf0CQw7VZj0lOzVEBLhCwdtCdnJAN8xcEaewUWo-Sc5qznVdjuaUJz7LoTjCWBLJ_EHXdQAa63lkVk_7VnKAdzr7fqHyDcHfIDfSBVy-hWJU92Lsgnr9YpXFeHXOqAEGyYJdy_'
+  // ]
 
-      
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: databaseURL
+
+
+
+  // These registration tokens come from the client FCM SDKs.
+
+  const deviceToken =
+    'cMhoX5SvBQzkdPFwmdNbmp:APA91bESjvXp95sxRqFroUSHUzEQg0yplFGbg5TfxsGmZ43ZFTxRCEDPiGlxAdyq3CX-v1wUlmwUP1-0PhHDqSn3VsrZyKzMGv4okmkc_htIY4GZokWAdtfYIMiTML0ldZb4jesluOTJ'
+    ;
+  // const topic = 'highScores';
+  // // Subscribe the devices corresponding to the registration tokens to the
+  // // topic.
+  // getMessaging().subscribeToTopic(registrationTokens, topic)
+  //   .then((response) => {
+  //     // See the MessagingTopicManagementResponse reference documentation
+  //     // for the contents of response.
+  //     console.log('Successfully subscribed to topic:', response);
+  //   })
+  //   .catch((error) => {
+  //     console.log('Error subscribing to topic:', error);
+  //   });
+
+  //   // The topic name can be optionally prefixed with "/topics/".
+
+
+
+  // // See documentation on defining a message payload.
+  // const message = {
+  //   notification: {
+  //     title: `'${req.body.title}}'`,
+  //     body: `'${req.body.content}'`
+  //   },
+  //   topic: topic
+  // };
+
+  // // Send a message to devices subscribed to the combination of topics
+  // // specified by the provided condition.
+  // getMessaging().send(message)
+  //   .then((response) => {
+  //     // Response is a message ID string.
+  //     console.log('Successfully sent message:', response);
+  //   })
+  //   .catch((error) => {
+  //     console.log('Error sending message:', error);
+  //   });
+
+
+
+
+
+  // admin.initializeApp({
+  //   credential: admin.credential.cert(serviceAccount),
+  //   databaseURL: databaseURL
+  // })
+
+  function getAccessToken() {
+    return new Promise(function (resolve, reject) {
+      var key = serviceAccount
+      var jwtClient = new google.auth.JWT(
+        key.client_email,
+        null,
+        key.private_key,
+        SCOPES,
+        null
+      )
+      jwtClient.authorize(function (err, tokens) {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve(tokens.access_token)
       })
-      
-      function getAccessToken() {
-        return new Promise(function(resolve, reject) {
-          var key = serviceAccount
-          var jwtClient = new google.auth.JWT(
-            key.client_email,
-            null,
-            key.private_key,
-            SCOPES,
-            null
-          )
-          jwtClient.authorize(function(err, tokens) {
-            if (err) {
-              reject(err)
-              return
-            }
-            resolve(tokens.access_token)
-          })
-        })
-      }
-      
-      async function init() {
-        const body = {
-          message: {
-            data: { key: 'value' },
-            notification: {
-              title:`'${req.body.titles}'`,
-              body: `'${req.body.content}'`
-            },
-            webpush: {
-              headers: {
-                Urgency: 'high'
-              },
-              notification: {
-                requireInteraction: 'true'
-              }
-            },
-            token: deviceToken
+    })
+  }
+
+  async function init() {
+    const body = {
+      message: {
+        data: { key: 'value' },
+        notification: {
+          title: `'${req.body.titles}'`,
+          body: `'${req.body.content}'`
+        },
+        webpush: {
+          headers: {
+            Urgency: 'high'
+          },
+          notification: {
+            requireInteraction: 'true'
           }
-        }
-      
-        try {
-          const accessToken = await getAccessToken()
-          console.log('accessToken: ', accessToken)
-          const { data } = await axios.post(URL, JSON.stringify(body), {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`
-            }
-          })
-          console.log('name: ', data.name)
-        } catch (err) {
-          console.log('err: ', err.message)
-        }
+        },
+        token: deviceToken
       }
-      for (let index = 0; index < deviceToken.length; index++) {
-        const element = deviceToken[index];
-      
-        console.log(element);
-        init()
-      }
-      
     }
+
+    try {
+      const accessToken = await getAccessToken()
+      console.log('accessToken: ', accessToken)
+      const { data } = await axios.post(URL, JSON.stringify(body), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      console.log('name: ', data.name)
+    } catch (err) {
+      console.log('err: ', err.message)
+    }
+  }
+  // for (let index = 0; index < deviceToken.length; index++) {
+  //   const element = deviceToken[index];
+
+  //   console.log(element);
+
+  // }
+  init()
+}
 
 
 
